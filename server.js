@@ -7,7 +7,7 @@ var fs = require( 'fs' );
 
 let videoStitch = require( 'video-stitch' );
 let videoConcat = videoStitch.concat;
-const PORT = 8080;
+const PORT = 57072;
 
 module.exports = function() {
     app.use( bodyParser.json() );
