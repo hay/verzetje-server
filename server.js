@@ -23,7 +23,7 @@ module.exports = function() {
 
     var storage = multer.diskStorage( {
         destination: function ( request, file, callback ) {
-            callback( null, './server/uploads' );
+            callback( null, './uploads' );
         },
         filename: function ( request, file, callback ) {
             console.log( file );
