@@ -3,9 +3,16 @@ const fs = require('fs');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
+function removeFile(path) {
+    const exists = fs.existsSync(path);
+    if (exists) {
+        fs.unlinkSync(path);
+    }
+}
+
 module.exports = async function(callback) {
-    fs.unlinkSync('./movies.txt');
-    fs.unlinkSync('./output.mp4');
+    removeFile('./movies.txt');
+    removeFile('./output.mp4');
     let files = await glob('./uploads/*');
     files = files.map(f => `file '${f}'`).join('\n');
     fs.writeFileSync('movies.txt', files);
