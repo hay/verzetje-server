@@ -11,10 +11,13 @@ function removeFile(path) {
 }
 
 module.exports = async function(callback) {
+    console.log('Removing some files');
     removeFile('./movies.txt');
     removeFile('./output.mp4');
     let files = await glob('./uploads/*');
     files = files.map(f => `file '${f}'`).join('\n');
+    console.log(`Concatting files ${files}`);
     fs.writeFileSync('movies.txt', files);
     await exec('ffmpeg -safe 0 -f concat -i ./movies.txt -c copy output.mp4');
+    console.log('okay ready');
 }
