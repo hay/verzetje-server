@@ -4,12 +4,20 @@ var multer = require( "multer" );
 var app = express();
 var path = require( 'path' );
 var fs = require( 'fs' );
+const concat = require('./concat.js');
+const serveIndex = require('serve-index')
 
 let videoStitch = require( 'video-stitch' );
 let videoConcat = videoStitch.concat;
 const PORT = 57072;
 
 module.exports = function() {
+    console.log('hoi');
+    app.use(
+        '/uploads',
+        express.static('uploads'),
+        serveIndex('uploads', {'icons': true})
+    );
     app.use( bodyParser.json() );
     app.use( bodyParser.urlencoded( {
         extended: true
@@ -39,6 +47,10 @@ module.exports = function() {
         res.sendFile( path.join( __dirname + '/static/index.html' ) );
     } );
 
+    app.get('/video', (req, res) => {
+        res.sendFile( path.join( __dirname + '/output.mp4' ) );
+    });
+
     app.post( '/upload', function ( req, res ) {
         upload( req, res, function ( err ) {
 
@@ -48,7 +60,9 @@ module.exports = function() {
             }
 
             console.log( 'Video Uploaded', req.file );
-            concat( req, res );
+            concat(() => {
+                res.send( 200 );
+            });
 
         } )
     } );
@@ -57,6 +71,7 @@ module.exports = function() {
         console.log( 'Listening on port ' + server.address().port )
     } );
 
+    /*
     function concat( req, res ) {
         var clips = [];
 
@@ -94,6 +109,7 @@ module.exports = function() {
 
         } )
     };
+    */
 
     return app;
 }
